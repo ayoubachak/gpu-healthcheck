@@ -12,11 +12,11 @@ memtest_vulkan.
 3. `bash linux/setup_gpu_burn.sh` clones wilicc/gpu-burn into `external/gpu-burn` and
    builds it for Ada with `-gencode=arch=compute_89,code=sm_89`. The script refuses to
    overwrite an existing clone; review the source first.
-4. Run the compute stages. `quick` is 2 x 4 minutes, `full` is 2 x 15 minutes, and the
-   first uses FP32 while the second uses `-tc` for cuBLAS Tensor Core work:
+4. Run the two compute stages. `--minutes` sets the duration of each stage; the first
+   uses FP32 and the second uses `-tc` for cuBLAS Tensor Core work:
 
    ```bash
-   python3 linux/run_linux.py --gpu 0 --mode quick
+   python3 linux/run_linux.py --gpu 0 --minutes 8
    ```
 
    The runner refuses any device that is not an RTX 4090 with at least 23,000 MiB.
@@ -34,8 +34,9 @@ memtest_vulkan.
        --out results/TEST_YYYYMMDD_HHMMSS_GPU0 --seconds 900
    ```
 
-   After the requested time the runner sends SIGINT so the tool prints its own summary,
-   then presses Enter if it asks for a final keypress. If a device menu appears, pass
+   `--seconds` is required; memtest_vulkan documents a 6-minute minimum. After the
+   requested time the runner sends SIGINT so the tool prints its own summary, then
+   presses Enter if it asks for a final keypress. If a device menu appears, pass
    `--vulkan-device N` using the menu number. The log must show the RTX 4090 on the
    `Testing ...` line and no errors on the summary line.
 

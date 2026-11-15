@@ -59,11 +59,11 @@ not available there; use HWiNFO or GPU-Z if they are supported by the card.
    without placing load on the GPU.
 3. `bash linux/setup_gpu_burn.sh` clones and builds gpu-burn for Ada (`sm_89`). It needs
    `git`, `make`, a C++ compiler and `nvcc`, and it does not overwrite an existing clone.
-4. Run two monitored compute stages:
+4. Run two monitored compute stages, FP32 then `-tc`. `--minutes` is the duration of
+   each stage:
 
    ```bash
-   python3 linux/run_linux.py --gpu 0 --mode quick   # 2 x 4 min
-   python3 linux/run_linux.py --gpu 0 --mode full    # 2 x 15 min
+   python3 linux/run_linux.py --gpu 0 --minutes 8
    ```
 
 5. Run the VRAM test with the official Linux binary from memtest_vulkan's releases:

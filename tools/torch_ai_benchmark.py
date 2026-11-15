@@ -16,13 +16,13 @@ from datetime import datetime, timezone
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--gpu", type=int, default=0)
-    p.add_argument("--seconds", type=int, default=120, help="Approximate repeated fp16 GEMM run (min 10)")
+    p.add_argument("--seconds", type=int, required=True, help="Duration of the repeated fp16 GEMM run in seconds")
     p.add_argument("--size", type=int, default=4096, help="Square matrix dimension (1024..8192)")
     p.add_argument("--memory-check", action="store_true", help="Fill/read ~75%% of available VRAM with simple byte patterns")
     p.add_argument("--json-out", type=pathlib.Path, default=None)
     a = p.parse_args()
-    if a.seconds < 10 or not 1024 <= a.size <= 8192 or a.gpu < 0:
-        p.error("seconds >=10, size 1024..8192, gpu >=0")
+    if a.seconds < 1 or not 1024 <= a.size <= 8192 or a.gpu < 0:
+        p.error("seconds >=1, size 1024..8192, gpu >=0")
     results = {"timestamp_utc": datetime.now(timezone.utc).isoformat(), "device_index": a.gpu,
                "requested_test_seconds": a.seconds, "matrix_size": a.size, "checks": {}, "status": "INCOMPLETE"}
     try:

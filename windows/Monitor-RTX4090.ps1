@@ -1,6 +1,6 @@
 param(
   [int]$GpuIndex = 0,
-  [int]$DurationMinutes = 90,
+  [int]$DurationMinutes = 0,   # 0 = log until Ctrl+C
   [int]$StopCoreC = 88
 )
 $ErrorActionPreference = 'Stop'
@@ -25,9 +25,10 @@ $csvPath = Join-Path $out 'telemetry.csv'
 '"timestamp","index","name","memory_total_MiB","memory_used_MiB","temp_core_C","gpu_util_pct","power_W","sm_clock_MHz","mem_clock_MHz","pstate"' | Set-Content $csvPath
 Write-Host "Logging GPU $GpuIndex to $out"
 Write-Host 'Run OCCT/3DMark/memtest_vulkan now. STOP GUI STRESS TESTS if a high-temp warning appears.'
-$end = (Get-Date).AddMinutes($DurationMinutes)
+$end = $null
+if ($DurationMinutes -gt 0) { $end = (Get-Date).AddMinutes($DurationMinutes) }
 $high = $false
-while ((Get-Date) -lt $end) {
+while ($null -eq $end -or (Get-Date) -lt $end) {
   try {
     $lines = @(& $smi -i $GpuIndex --query-gpu=$fields --format=csv,noheader,nounits 2>&1)
     if ($LASTEXITCODE -ne 0) { Add-Content (Join-Path $out 'telemetry_notes.txt') "$(Get-Date): nvidia-smi failed: $($lines -join ' ')"; Start-Sleep -Seconds 2; continue }

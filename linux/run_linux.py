@@ -103,14 +103,14 @@ def run_stage(args, name, seconds, addflags, sensor, output):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="RTX 4090 tested purchase runner (stock settings)")
+    parser = argparse.ArgumentParser(description="RTX 4090 compute runner (stock settings)")
     parser.add_argument("--gpu", type=int, default=0, help="nvidia-smi GPU index")
-    parser.add_argument("--mode", choices=["quick", "full"], default="quick")
+    parser.add_argument("--minutes", type=int, required=True, help="Duration of each of the two compute stages")
     parser.add_argument("--gpu-burn", type=pathlib.Path, default=ROOT / "external/gpu-burn/gpu_burn")
     parser.add_argument("--cutoff", type=int, default=88, help="Core GPU temperature safety cutoff C (default: 88)")
     args = parser.parse_args()
-    if args.gpu < 0 or not 75 <= args.cutoff <= 90:
-        parser.error("--gpu must be >=0 and --cutoff must be within 75..90")
+    if args.gpu < 0 or args.minutes < 1 or not 75 <= args.cutoff <= 90:
+        parser.error("--gpu must be >=0, --minutes >=1 and --cutoff within 75..90")
     args.gpu_burn = args.gpu_burn.expanduser().resolve()
     if not args.gpu_burn.is_file() or not args.gpu_burn.stat().st_mode & 0o111:
         parser.error(f"Executable gpu-burn missing: {args.gpu_burn}. See linux/README.md")
@@ -131,13 +131,13 @@ def main():
     snapshot = subprocess.run(["nvidia-smi", "-i", str(args.gpu), "-q"], text=True, capture_output=True)
     (out / "preflight.txt").write_text(snapshot.stdout + "\n" + snapshot.stderr, encoding="utf-8")
     record = {"gpu_index": args.gpu, "gpu_name": identity[1], "memory_total_mib": vram_mib,
-              "mode": args.mode, "start_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
+              "minutes_per_stage": args.minutes, "start_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
               "core_temp_cutoff_C": args.cutoff, "stages": [], "notes": ["memtest_vulkan must be run separately and logged to this directory."]}
     sensor = SensorLogger(args.gpu, out / "telemetry.csv", args.cutoff)
     sensor.start()
-    lengths = (240, 240) if args.mode == "quick" else (900, 900)
+    seconds = args.minutes * 60
     try:
-        for name, seconds, flags in [("fp32", lengths[0], []), ("tensor", lengths[1], ["-tc"])]:
+        for name, flags in [("fp32", []), ("tensor", ["-tc"])]:
             if sensor.hot:
                 break
             record["stages"].append(run_stage(args, name, seconds, flags, sensor, out))

@@ -9,28 +9,29 @@ utilities from download sites.
    repair. Confirm the PSU and cabling are rated for the card (850 W for the reference
    4090) and that the connector is fully seated.
 2. **OCCT** from <https://www.ocbase.com/download>. The personal edition is licensed for
-   non-commercial use. Run the *VRAM* test at 80-90% of free VRAM with error detection for
-   20 minutes, and the *3D Adaptive* test with error detection for another 20 minutes.
-   Save or photograph the error report from each run. A black screen or driver reset is a
-   serious warning; check the PSU and driver before blaming the card.
+   non-commercial use. Run the *VRAM* test at 80-90% of free VRAM with error detection,
+   then the *3D Adaptive* test with error detection. Record the duration and result of
+   each run in the scorecard and save or photograph the error report. A black screen or
+   driver reset is a serious warning; check the PSU and driver before blaming the card.
 3. **memtest_vulkan** from
    <https://github.com/GpuZelenograd/memtest_vulkan/releases>. Run the Windows binary for
-   at least 15 minutes, stop it with Ctrl+C and wait for the summary line. Save the
-   console text or a photo. The tool displays which GPU it is testing.
+   at least 6 minutes, the minimum in its documentation; stop it with Ctrl+C and wait for
+   the summary line. Save the console text or a photo. The tool displays which GPU it is
+   testing.
 4. **3DMark Time Spy** from <https://benchmarks.ul.com/3dmark>. Record the **Graphics**
-   score, not the combined score, and optionally repeat the run two or three times.
-   Compare against results for the same card, driver and power limit; there is no fixed
-   pass threshold. The value of this test is spotting a card that is far off its class.
+   score, not the combined score, and optionally repeat the run. Compare against results
+   for the same card, driver and power limit; there is no fixed pass threshold. The value
+   of this test is spotting a card that is far off its class.
 5. **Telemetry** in parallel, from PowerShell in the `windows` folder:
 
    ```powershell
-   powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Monitor-RTX4090.ps1 `
-       -GpuIndex 0 -DurationMinutes 90
+   powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Monitor-RTX4090.ps1 -GpuIndex 0
    ```
 
+   It logs until Ctrl+C. Pass `-DurationMinutes N` to stop after a set number of minutes.
    Outputs `results/windows_<timestamp>/telemetry.csv`, `preflight.txt` and
    `telemetry_notes.txt`. The script refuses a non-4090 device and warns at 88 °C, but
-   it does not stop OCCT. Stop the GUI test yourself and investigate cooling or airflow.
+   it does not stop OCCT. Stop the GUI test manually and investigate cooling or airflow.
 
 6. Keep a phone video showing the test windows, the GPU identity and the final results.
    Photograph the connector and invoice separately, and redact personal details before

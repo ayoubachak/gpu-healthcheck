@@ -14,6 +14,9 @@ import subprocess
 import sys
 import time
 
+# memtest_vulkan's README: "wait at least 6 minutes".
+MIN_SECONDS = 360
+
 
 def _signal_group(pid, sig):
     try:
@@ -26,13 +29,13 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--bin", type=pathlib.Path, required=True, help="Path to upstream memtest_vulkan executable")
     ap.add_argument("--out", type=pathlib.Path, required=True, help="Existing run results directory")
-    ap.add_argument("--seconds", type=int, default=900)
+    ap.add_argument("--seconds", type=int, required=True, help="Test duration in seconds (minimum 360)")
     ap.add_argument("--vulkan-device", type=int, default=None, help="Optional memtest_vulkan menu number (NOT nvidia-smi index)")
     ns = ap.parse_args()
     if sys.platform == "win32":
         ap.error("Use vendor memtest_vulkan interactively on Windows; this runner requires Linux SIGINT")
-    if not 420 <= ns.seconds <= 7200:
-        ap.error("--seconds must be 420..7200 (allows startup/selection overhead)")
+    if ns.seconds < MIN_SECONDS:
+        ap.error(f"--seconds must be at least {MIN_SECONDS} (memtest_vulkan documents a 6-minute minimum)")
     if ns.vulkan_device is not None and ns.vulkan_device < 1:
         ap.error("--vulkan-device must be positive Vulkan menu number")
     if not ns.out.is_dir() or not (ns.out / "run.json").is_file():

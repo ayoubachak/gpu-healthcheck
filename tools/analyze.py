@@ -14,6 +14,8 @@ from statistics import mean
 
 # gpu-burn -m 85% should reserve roughly 20 GB on an idle 24 GB card.
 MIN_STRESS_VRAM_MIB = 16000
+# memtest_vulkan's README: "wait at least 6 minutes".
+MEMTEST_MIN_SECONDS = 360
 
 
 def burn_result(path, idx):
@@ -57,8 +59,8 @@ def vram_evidence(folder):
     try:
         meta = json.loads(meta_path.read_text(encoding="utf-8"))
         seconds = float(meta.get("elapsed_seconds", 0))
-        if seconds < 360:
-            return "INCONCLUSIVE", f"Memory test lasted only {seconds:.0f}s (<360s required)"
+        if seconds < MEMTEST_MIN_SECONDS:
+            return "INCONCLUSIVE", f"Memory test lasted only {seconds:.0f}s; memtest_vulkan documents a {MEMTEST_MIN_SECONDS}s minimum"
         if meta.get("timed_out_or_killed", False):
             return "INCONCLUSIVE", "Vulkan tester required forced termination"
     except (OSError, ValueError, TypeError, json.JSONDecodeError):
@@ -181,7 +183,7 @@ def examine(folder, require_ai=False):
         overall = "SOFTWARE CHECKS PASSED - PHYSICAL INSPECTION STILL REQUIRED"
         code = 0
     return {"verdict": overall, "exit_code": code, "checks": checks, "telemetry": stat,
-            "warnings": warnings, "notes": informational, "profile": run.get("mode", "unknown")}
+            "warnings": warnings, "notes": informational}
 
 
 def write_reports(folder, result):

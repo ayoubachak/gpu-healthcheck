@@ -20,7 +20,7 @@ def make_case(folder, *, temp=73, memory_mib=24564, gpu_name="NVIDIA GeForce RTX
         stages.append({"name": name, "log": path, "exit_code": 0,
                        "duration_actual_seconds": 240, "duration_requested_seconds": 240, "thermal_stop": False})
     (folder / "run.json").write_text(json.dumps({"gpu_index": 0, "gpu_name": gpu_name,
-        "memory_total_mib": memory_mib, "core_temp_cutoff_C": 88, "mode": "quick", "stages": stages,
+        "memory_total_mib": memory_mib, "core_temp_cutoff_C": 88, "stages": stages,
         "thermal_stop": False, "sensor_errors": []}), encoding="utf-8")
     (folder / "memtest_vulkan.log").write_text(
         "Testing 1: Bus=0x01:00 DevId=0x2684 24GB NVIDIA GeForce RTX 4090\n"
