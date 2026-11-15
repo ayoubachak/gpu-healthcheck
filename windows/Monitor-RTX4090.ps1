@@ -37,7 +37,7 @@ while ((Get-Date) -lt $end) {
       if ($parts.Count -ge 6) {
         $v = 0.0
         if ([double]::TryParse($parts[5].Trim(), [ref]$v) -and $v -ge $StopCoreC -and -not $high) {
-          Write-Warning "GPU core temperature is $v C. STOP your stress test and investigate cooling."
+          Write-Warning "GPU core temperature is $v C. STOP the stress test and investigate cooling."
           Add-Content (Join-Path $out 'telemetry_notes.txt') "TEMPERATURE THRESHOLD at $(Get-Date): $v C"
           $high = $true
         }
