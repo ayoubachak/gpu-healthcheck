@@ -47,4 +47,4 @@ while ((Get-Date) -lt $end) {
   Start-Sleep -Seconds 2
 }
 Write-Host "Finished. Results: $out"
-if ($high) { Write-Warning 'High core temperature observed. This is NOT a passing run.' }
+if ($high) { Write-Warning 'High core temperature observed.' }

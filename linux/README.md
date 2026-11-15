@@ -11,7 +11,7 @@ memtest_vulkan.
    optional tools are present. It places no load on the GPU.
 3. `bash linux/setup_gpu_burn.sh` clones wilicc/gpu-burn into `external/gpu-burn` and
    builds it for Ada with `-gencode=arch=compute_89,code=sm_89`. The script refuses to
-   overwrite an existing clone, so review the source if you want to.
+   overwrite an existing clone; review the source first.
 4. Run the compute stages. `quick` is 2 x 4 minutes, `full` is 2 x 15 minutes, and the
    first uses FP32 while the second uses `-tc` for cuBLAS Tensor Core work:
 
@@ -40,8 +40,7 @@ memtest_vulkan.
    `Testing ...` line and no errors on the summary line.
 
    memtest_vulkan may allocate less than the full 24 GB depending on the driver. Read
-   the reported memory size; a 3.5 GB allocation does not verify 24 GB of VRAM. This is
-   a limitation of the tool, not something the parser can compensate for.
+   the reported memory size; a 3.5 GB allocation does not verify 24 GB of VRAM.
 
 6. Optional for AI buyers: install CUDA-enabled PyTorch from the official instructions
    and save the result into the same directory:
@@ -51,8 +50,8 @@ memtest_vulkan.
        --json-out results/TEST_YYYYMMDD_HHMMSS_GPU0/torch_ai.json
    ```
 
-7. Optional driver-fault check. Export a bounded excerpt, and be aware that it may
-   contain machine identifiers:
+7. Optional driver-fault check. Export a bounded excerpt; it may contain machine
+   identifiers:
 
    ```bash
    sudo journalctl -k --since '2 hours ago' --no-pager > \
@@ -75,5 +74,5 @@ Notes:
 - Do not run OCCT, gpu-burn and memtest_vulkan at the same time. A marginal PSU or a
   shared power budget makes the result ambiguous, and heat from one test changes the
   conditions of the next.
-- A crash, black screen or Xid during a stage is a warning, not an automatic verdict.
-  Repeat it on a known-good PSU and host before rejecting the card.
+- A crash, black screen or Xid during a stage is a warning. Repeat it on a known-good
+  PSU and host before rejecting the card.

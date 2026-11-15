@@ -40,8 +40,5 @@ private.
 - Decision: BUY / RETEST / REJECT
 - Outstanding risks:
 
-Reject, pending an independent diagnosis, if: the 16-pin connector is damaged, a memory
-test reproduces errors on a known-good host, or the card is unstable at stock settings.
-
-Software output can be fabricated. Prefer watching the tests run and checking the card
-in person.
+Reject if the 16-pin connector is damaged, a memory test reproduces errors on a
+known-good host, or the card is unstable at stock settings.

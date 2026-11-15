@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Optional CUDA PyTorch compute verification and VRAM data-pattern test.
 
-Requires torch with CUDA; this does not install or change your environment.
+Requires torch with CUDA; this does not install or change the environment.
 """
 import argparse
 import json
@@ -111,7 +111,7 @@ def main():
             torch.cuda.empty_cache()
             if errors:
                 raise RuntimeError(f"GPU VRAM pattern test found {errors} byte mismatches")
-        results["status"] = "PASS (tests executed; hardware longevity not guaranteed)"
+        results["status"] = "PASS"
     except Exception as exc:
         results["status"] = "FAIL/INCONCLUSIVE"
         results["error"] = f"{type(exc).__name__}: {exc}"

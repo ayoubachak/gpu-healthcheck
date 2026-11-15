@@ -6,12 +6,8 @@ durations and a temperature limit, records NVIDIA telemetry while they run, and 
 the results into a report that keeps "failed" and "not tested" separate.
 
 The kit does not ship third-party binaries. OCCT, 3DMark, gpu-burn and memtest_vulkan
-come from their official sources. Physically inspecting the card before powering it on
-is still the most important step and nothing here replaces it.
-
-**Validation status:** the parsers and report logic are covered by offline unit tests
-(`tests/`). The test procedure has not been validated on a physical RTX 4090 by the
-author. A report records observations; it cannot certify a card's remaining lifetime.
+come from their official sources. Physical inspection of the card remains part of the
+checklist.
 
 ## Checks
 
@@ -38,11 +34,11 @@ What the automated checks actually do:
 - **OCCT** repeats VRAM and 3D workloads with its own error detection. OCCT is
   Windows-only and the personal edition is licensed for non-commercial use.
 - **3DMark Time Spy Graphics** is a performance reference. It catches a card that is
-  far slower than its class; it is not an error detector.
+  far slower than its class; it reports no errors.
 
 ## Thresholds
 
-These are the only fixed numbers in the kit, and each is a deliberate choice:
+These are the only fixed numbers in the kit:
 
 | Value | Where | Why |
 |---|---|---|
@@ -108,7 +104,7 @@ Details and troubleshooting: [linux/README.md](linux/README.md).
 
 Use [windows/README.md](windows/README.md): OCCT VRAM and 3D Adaptive tests, memtest_vulkan,
 a Time Spy Graphics score, and `windows/Monitor-RTX4090.ps1` for telemetry. The script warns
-at 88 °C but does not stop OCCT; stop it yourself.
+at 88 °C but does not stop OCCT; stop OCCT manually.
 
 ## Reading the report
 
@@ -118,7 +114,7 @@ at 88 °C but does not stop OCCT; stop it yourself.
 | Exit | Verdict | Meaning |
 |---|---|---|
 | 0 | software checks passed | Every required check produced clean evidence. Physical inspection still required. |
-| 1 | incomplete | A check is missing or inconclusive. Do not treat this as a pass. |
+| 1 | incomplete | A check is missing or inconclusive. |
 | 2 | red flag | A verified error, wrong device or wrong VRAM capacity. Investigate or reject. |
 
 A missing kernel log or a PyTorch environment error makes the report incomplete, not
@@ -134,8 +130,7 @@ bash -n linux/setup_gpu_burn.sh
 ```
 
 GitHub Actions runs the same offline checks on Python 3.10 to 3.13 and parses the
-PowerShell script. CI has no GPU, so a green run only proves that the code and parsers
-behave as tested.
+PowerShell script. CI has no GPU; it checks the code and parsers only.
 
 ## Sources
 
@@ -147,16 +142,12 @@ behave as tested.
 - [3DMark](https://benchmarks.ul.com/3dmark): Time Spy Graphics score.
 - [PyTorch installation](https://pytorch.org/get-started/locally/): CUDA builds for the optional AI check.
 
-## Limitations and privacy
+## Safety and privacy
 
 - Do not power a card with a damaged or partially seated 16-pin connector. Use the PSU
   and cables rated for the card, at stock clocks and power limits.
-- A failing test on one host does not prove the GPU is faulty. Reproduce it on a
-  known-good PSU and system before rejecting the card.
+- Reproduce a failure on a known-good PSU and system before rejecting the card.
 - Test logs can contain the GPU UUID, serial, driver version, hostname and seller
   details. `results/` and `external/` are git-ignored; inspect logs before sharing them.
-- Software checks are probabilistic. They cannot detect an intermittent fault that has
-  not occurred yet, authenticate a seller, or replace an invoice and a visual inspection.
 
-See [SECURITY.md](SECURITY.md) and [CONTRIBUTING.md](CONTRIBUTING.md). The MIT licence
-covers this repository's own code and documentation only.
+See [SECURITY.md](SECURITY.md) and [CONTRIBUTING.md](CONTRIBUTING.md).

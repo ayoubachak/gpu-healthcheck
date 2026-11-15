@@ -162,8 +162,7 @@ def examine(folder, require_ai=False):
     else:
         checks["driver_xid"] = {"status": "MISSING", "detail": "No kernel excerpt (may require sudo)"}
 
-    informational.append("Even a Vulkan PASS may cover much less than 24 GB if the driver limits allocation. Review tester output.")
-    informational.append("nvidia-smi cannot inspect physical power connectors, cooling wear or hidden repairs.")
+    informational.append("Vulkan tests may cover less than 24 GB depending on driver allocation.")
 
     required = []
     for name, item in checks.items():
@@ -197,8 +196,7 @@ def write_reports(folder, result):
               "- [ ] Verify board model, serial, invoice, warranty and repair history",
               "- [ ] Confirm the VRAM tester selected the correct GPU, allocated meaningful memory and showed zero errors",
               "- [ ] Compare performance with cards of the same model and power limit; check for throttling and display artifacts",
-              "- [ ] Retest on a known-good PSU and host if any error appears", "",
-              "A report records software observations only. It does not certify remaining lifetime or authenticate a seller."]
+              "- [ ] Retest on a known-good PSU and host if any error appears"]
     (folder / "report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(result["verdict"] + f"\nReports: {folder / 'report.md'} and {folder / 'report.json'}")
 

@@ -6,5 +6,4 @@ GPU Healthcheck - start here
 3. Windows: read windows/README.md for OCCT, memtest_vulkan, 3DMark and the
    sensor logger.
 4. Run the hardware tests on the card itself. GitHub Actions only checks code.
-5. Keep results/, which may contain GPU serials and host details, out of Git.
-6. A clean report is evidence, not a warranty. See README.md for the criteria.
+5. results/ may contain GPU serials and host details and is git-ignored.

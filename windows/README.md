@@ -38,7 +38,7 @@ utilities from download sites.
 
 GPU-Z (<https://www.techpowerup.com/gpuz/>) is a useful second opinion on identity, VBIOS
 and sensors. HWiNFO can show hotspot or memory-junction temperatures that `nvidia-smi`
-does not expose. Neither proves that a card is genuine or stable.
+does not expose.
 
-A failed test should be repeated at stock settings on a known-good PSU before you accept
-the diagnosis. See the root [README](../README.md) for the report and buy/no-buy criteria.
+A failed test should be repeated at stock settings on a known-good PSU before rejecting
+the card. See the root [README](../README.md) for the report and buy/no-buy criteria.

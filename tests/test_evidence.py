@@ -156,7 +156,7 @@ class TestEvidence(unittest.TestCase):
 
     def test_good_ai_required_pass(self):
         folder = self.with_case()
-        (folder / "torch_ai.json").write_text('{"status":"PASS (tests executed; hardware longevity not guaranteed)"}')
+        (folder / "torch_ai.json").write_text('{"status":"PASS"}')
         self.assertEqual(examine(folder, require_ai=True)["exit_code"], 0)
 
     def test_missing_driver_not_ready(self):
