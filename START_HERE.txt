@@ -1,0 +1,10 @@
+GPU Healthcheck - start here
+
+1. Power off and inspect the 16-pin connector and cable before anything else.
+   Do not power a damaged or partially seated connector.
+2. Linux: read README.md and linux/README.md, then run `python3 tools/doctor.py`.
+3. Windows: read windows/README.md for OCCT, memtest_vulkan, 3DMark and the
+   sensor logger.
+4. Run the hardware tests on the card itself. GitHub Actions only checks code.
+5. Keep results/, which may contain GPU serials and host details, out of Git.
+6. A clean report is evidence, not a warranty. See README.md for the criteria.

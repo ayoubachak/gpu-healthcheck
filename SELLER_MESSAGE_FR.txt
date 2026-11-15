@@ -1,0 +1,5 @@
+Bonjour, votre RTX 4090 m'intéresse. Pourriez-vous confirmer le modèle exact, la facture et l'état du connecteur d'alimentation 16 broches (photo de près, PC éteint) ?
+
+Avant l'achat, serait-il possible de tester la carte sur votre PC, à ses fréquences d'origine, avec GPU-Z / NVIDIA-SMI, un test VRAM (OCCT ou memtest_vulkan) et un test GPU de 15-20 minutes, en surveillant les températures ? Je peux venir avec une clé USB et vous transmettre les liens des outils officiels.
+
+Merci !

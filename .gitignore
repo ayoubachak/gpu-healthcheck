@@ -1,0 +1,12 @@
+# Evidence may contain GPU UUID/serial/driver data, serial numbers, hostname and seller information.
+results/*
+!results/README.txt
+external/*
+!external/README.txt
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.env
+.DS_Store
+*.log
